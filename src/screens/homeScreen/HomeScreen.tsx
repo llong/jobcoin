@@ -6,42 +6,50 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { connect } from 'react-redux';
 
+import { fetchTransactionss, fetchWallet, signOut } from '../../state/actions';
 import { useGlobalState } from '../../state/GlobalState';
-import { getTransactions, getWalletAddress } from '../../api/apiService';
 
 // Import components
 import JobCoinBalance from '../../components/JobCoinBalance';
 import SendJobCoin from '../../components/SendJobCoin';
 import Header from './components/Header';
 import TransactionsChart from '../../components/TransactionsChart';
+import { IWallet } from '../../interfaces/wallet';
 
-const HomeScreen: React.FC = (): ReactElement => {
+interface IProps {
+  fetchTransactionss: any;
+  fetchWallet?: any;
+  walletAddress?: string;
+  walletData: IWallet;
+  signOut: any;
+}
+
+const HomeScreen: React.FC<IProps> = ({
+  fetchTransactionss,
+  fetchWallet,
+  walletAddress,
+  walletData,
+  signOut,
+}): ReactElement => {
   const { state, setState } = useGlobalState();
-  const { walletData } = state;
 
   React.useEffect(() => {
-    if (!!state.walletAddress) {
-      getWalletAddress(state.walletAddress).then(data =>
-        setState(prevState => ({ ...prevState, walletData: data })),
-      );
-      getTransactions().then(data =>
-        setState(prevState => ({ ...prevState, transactions: data })),
-      );
+    if (!!walletAddress) {
+      fetchWallet(walletAddress);
+      fetchTransactionss();
     }
-  }, [state.walletData]);
+  }, []);
 
   const handleSignOut = (): void => {
-    setState(prev => ({ ...prev, walletAddress: '' }));
+    signOut();
   };
 
-  if (state.walletAddress && state.walletData) {
+  if (walletAddress && walletData?.balance) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <Header
-          walletAddress={state.walletAddress}
-          signOutAction={handleSignOut}
-        />
+        <Header walletAddress={walletAddress} signOutAction={handleSignOut} />
 
         <View style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={styles.screenContainer}>
@@ -49,7 +57,7 @@ const HomeScreen: React.FC = (): ReactElement => {
               <JobCoinBalance balance={walletData?.balance} />
             </View>
             <View style={styles.widgetContainer}>
-              <SendJobCoin walletAddress={state.walletAddress} />
+              <SendJobCoin walletAddress={walletAddress} />
             </View>
             <View style={styles.widgetContainer}>
               <TransactionsChart />
@@ -80,4 +88,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = (state: any) => {
+  return {
+    transactions: state.transactions,
+    walletAddress: state.walletAddress,
+    walletData: state.walletData,
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchTransactionss,
+  fetchWallet,
+  signOut,
+})(HomeScreen);

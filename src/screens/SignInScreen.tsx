@@ -1,16 +1,22 @@
 import React, { ReactElement } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image } from 'react-native';
-import { useGlobalState } from '../state/GlobalState';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { Alert } from 'react-native';
+import { connect } from 'react-redux';
 
-const SignInScreen: React.FC = (): ReactElement => {
-  const [walletAddress, setWalletAddress] = React.useState<string>('');
-  const { setState } = useGlobalState();
+import { setWalletAddress } from '../state/actions';
+
+interface IProps {
+  setWalletAddress: any;
+}
+
+const SignInScreen: React.FC<IProps> = ({ setWalletAddress }): ReactElement => {
+  const [walletAddress, setWalletAddressField] = React.useState<string>('');
+
   const handleSignIn = (): void => {
     if (walletAddress) {
-      setState(prev => ({ ...prev, walletAddress }));
+      setWalletAddress(walletAddress);
     } else {
       Alert.alert('Please enter a valid wallet address');
     }
@@ -29,7 +35,7 @@ const SignInScreen: React.FC = (): ReactElement => {
         <Text>Jobcoin Address</Text>
         <TextInput
           placeholder="Enter Your Jobcoin Address"
-          onChangeText={input => setWalletAddress(input)}
+          onChangeText={input => setWalletAddressField(input)}
         />
         <Button onPress={handleSignIn} label="Sign In" />
       </SafeAreaView>
@@ -75,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInScreen;
+export default connect(null, { setWalletAddress })(SignInScreen);

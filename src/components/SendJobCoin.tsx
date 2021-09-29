@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import { useGlobalState } from '../state/GlobalState';
-import { getWalletAddress, sendTransaction } from '../api/apiService';
+import { connect } from 'react-redux';
+import { postTransaction } from '../state/actions';
 
 // Import Components
 import TextInput from '../components/TextInput';
@@ -9,31 +9,25 @@ import Button from '../components/Button';
 
 interface IProps {
   walletAddress: string;
+  postTransaction: any;
 }
 
-const SendJobCoin: React.FC<IProps> = ({ walletAddress }) => {
+const SendJobCoin: React.FC<IProps> = ({ walletAddress, postTransaction }) => {
   const [amountToSend, setAmountToSend] = useState('0');
   const [destinationAddress, setDestinationAddress] = useState('');
   const [error, setError] = useState('');
-  const { setState } = useGlobalState();
 
   const handleSendJobcoin = (): void => {
     const url = 'http://jobcoin.gemini.com/rascal-alibi/api/transactions';
 
     // Check if transaction body is valid
     if (parseInt(amountToSend) > 0 && destinationAddress && walletAddress) {
-      sendTransaction({
+      postTransaction({
         fromAddress: walletAddress,
         toAddress: destinationAddress,
         amount: amountToSend,
-      })
-        .then(_ => {
-          getWalletAddress(walletAddress).then(res =>
-            setState(prevState => ({ ...prevState, walletData: res })),
-          );
-          setAmountToSend('');
-        })
-        .catch(err => setError(err));
+      });
+      setAmountToSend('');
     } else {
       Alert.alert('please enter a valid address and amount to send.');
     }
@@ -70,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SendJobCoin;
+export default connect(null, { postTransaction })(SendJobCoin);

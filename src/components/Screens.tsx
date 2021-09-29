@@ -1,13 +1,22 @@
-import React, {ReactElement} from 'react';
-import {useGlobalState} from '../state/GlobalState';
+import React, { ReactElement } from 'react';
+import { connect } from 'react-redux';
 
 // Import Screens
 import SignInScreen from '../screens/SignInScreen';
 import HomeScreen from '../screens/homeScreen/HomeScreen';
 
-const Screens: React.FC = (): ReactElement => {
-  const {state} = useGlobalState();
-  return !!state.walletAddress ? <HomeScreen /> : <SignInScreen />;
+interface IProps {
+  walletAddress?: string;
+}
+
+const Screens: React.FC<IProps> = ({ walletAddress }): ReactElement => {
+  return !!walletAddress ? <HomeScreen /> : <SignInScreen />;
 };
 
-export default Screens;
+function mapStateToProps({ walletAddress }: { walletAddress: string }) {
+  return {
+    walletAddress,
+  };
+}
+
+export default connect(mapStateToProps)(Screens);
