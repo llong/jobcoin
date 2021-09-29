@@ -12,7 +12,9 @@ const Header: React.FC<IHeader> = ({
 }): ReactElement => {
   return (
     <View style={styles.mainContainer}>
-      <Text>{walletAddress}</Text>
+      <Text>
+        Wallet Address: <Text style={styles.boldText}>{walletAddress}</Text>
+      </Text>
       <Button title="Sign Out" onPress={signOutAction} />
     </View>
   );
@@ -26,6 +28,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 16,
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  boldText: {
+    fontWeight: '800',
   },
 });
 

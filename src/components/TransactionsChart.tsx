@@ -38,7 +38,7 @@ const TransactionsChart: React.FC = (): ReactElement => {
 
   return (
     <>
-      <Text>Jobcoin Transactions Per Day</Text>
+      <Text style={styles.chartHeaderText}>Jobcoin Transactions Per Day</Text>
       <View style={styles.chartContainer}>
         <VictoryChart
           width={Dimensions.get('window').width - 32}
@@ -62,6 +62,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: '#f5fcff',
+    borderWidth: 1,
+    borderColor: '#999',
+  },
+  chartHeaderText: {
+    textAlign: 'center',
+    fontSize: 18,
+    marginBottom: 8,
   },
 });
 

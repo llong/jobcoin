@@ -35,35 +35,32 @@ const HomeScreen: React.FC = (): ReactElement => {
     setState(prev => ({ ...prev, walletAddress: '' }));
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {!!state.walletAddress ? (
+  if (state.walletAddress && state.walletData) {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
         <Header
           walletAddress={state.walletAddress}
           signOutAction={handleSignOut}
         />
-      ) : (
-        <ActivityIndicator />
-      )}
-      <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.screenContainer}>
-          <View style={styles.widgetContainer}>
-            <JobCoinBalance balance={walletData?.balance} />
-          </View>
-          <View style={styles.widgetContainer}>
-            {state.walletAddress ? (
+
+        <View style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={styles.screenContainer}>
+            <View style={styles.widgetContainer}>
+              <JobCoinBalance balance={walletData?.balance} />
+            </View>
+            <View style={styles.widgetContainer}>
               <SendJobCoin walletAddress={state.walletAddress} />
-            ) : (
-              <ActivityIndicator />
-            )}
-          </View>
-          <View style={styles.widgetContainer}>
-            <TransactionsChart />
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-  );
+            </View>
+            <View style={styles.widgetContainer}>
+              <TransactionsChart />
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return <ActivityIndicator size="large" />;
 };
 
 const styles = StyleSheet.create({
