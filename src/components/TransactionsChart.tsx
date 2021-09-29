@@ -22,7 +22,7 @@ const TransactionsChart: React.FC<IProps> = ({
 
   if (transactions?.length) {
     transactions.forEach(transaction => {
-      const date = transaction.timestamp.split('T')[0];
+      const date = transaction.timestamp;
       if (sortTransactionsByDate[date]) {
         sortTransactionsByDate[date].push(transaction);
       } else {
@@ -56,6 +56,7 @@ const TransactionsChart: React.FC<IProps> = ({
             theme={VictoryTheme.material}
             domainPadding={10}>
             <VictoryBar
+              barWidth={20}
               data={graphData}
               x="date"
               y="sum"

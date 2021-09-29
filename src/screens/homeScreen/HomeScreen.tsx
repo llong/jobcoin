@@ -96,8 +96,10 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps, {
+const mapDispatchToProps = {
   fetchTransactionss,
   fetchWallet,
   signOut,
-})(HomeScreen);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
