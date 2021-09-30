@@ -29,7 +29,7 @@ const HomeScreen: React.FC = (): ReactElement => {
         setState(prevState => ({ ...prevState, transactions: data })),
       );
     }
-  }, [state.walletData]);
+  }, []);
 
   const handleSignOut = (): void => {
     setState(prev => ({ ...prev, walletAddress: '' }));
