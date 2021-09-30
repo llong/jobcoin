@@ -9,5 +9,5 @@ Some third-party packages have iOS pod dependencies. To run the demo app:
 
 There are 2 branches:
 
-master: Uses the React.context API to manage global state. 
+master: Uses the React.context API to manage global state. <br/>
 redux: Redux implementation of the app. 
